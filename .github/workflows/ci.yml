@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   unit-tests:
@@ -29,8 +30,20 @@ jobs:
       - name: Package
         run: mvn -B -ntp package -DskipTests
 
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Docker build
-        run: docker build -t simple-ci-demo:${{ github.sha }} .
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}/simple-ci-demo"
+          docker build -t "$IMAGE:${{ github.sha }}" .
+
+      - name: Docker push
+        if: github.event_name == 'push'
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}/simple-ci-demo"
+          docker push "$IMAGE:${{ github.sha }}"
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
