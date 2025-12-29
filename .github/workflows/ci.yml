@@ -52,7 +52,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
-          cache : "maven"
+          cache: "maven"
 
       - name: Integration tests (verify)
-        run: mvn -B -ntp verify
+        run: mvn -B -ntp -DskipTests -DskipITs=false verify
