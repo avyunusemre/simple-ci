@@ -29,6 +29,9 @@ jobs:
       - name: Package
         run: mvn -B -ntp package -DskipTests
 
+      - name: Docker build
+        run: docker build -t simple-ci-demo:${{ github.sha }} .
+
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
