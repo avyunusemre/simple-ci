@@ -20,7 +20,7 @@ class HelloControllerTest {
     void health_shouldReturnUp() throws Exception {
         mockMvc.perform(get("/health"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("DOWN"));
+                .andExpect(jsonPath("$.status").value("UP"));
     }
 
     @Test
