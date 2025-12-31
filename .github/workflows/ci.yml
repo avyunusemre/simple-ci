@@ -24,11 +24,16 @@ jobs:
           java-version: "17"
           cache: "maven"
 
-      - name: Unit tests
-        run: mvn -B -ntp clean test
+      - name: Unit tests + Coverage (JaCoCo)
+        run: mvn -B -ntp clean verify -DskipITs
 
-      - name: Package
-        run: mvn -B -ntp package -DskipTests
+      - name: Upload Coverage Report (JaCoCo HTML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Log in to GHCR
         if: github.event_name == 'push'
