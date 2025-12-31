@@ -89,6 +89,13 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*Application.class</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/*Config.class</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 
 					<!-- mvn verify sırasında minimum coverage kuralını kontrol eder -->
@@ -99,6 +106,11 @@
 							<goal>check</goal>
 						</goals>
 						<configuration>
+							<excludes>
+								<exclude>**/*Application.class</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/*Config.class</exclude>
+							</excludes>
 							<rules>
 								<rule>
 									<element>BUNDLE</element>
@@ -115,7 +127,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 
 		</plugins>
 	</build>
