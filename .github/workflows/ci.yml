@@ -25,16 +25,8 @@ jobs:
           java-version: "17"
           cache: "maven"
 
-      - name: Unit tests + Coverage (JaCoCo)
-        run: mvn -B -ntp clean verify -DskipITs
-
-      - name: Upload Coverage Report (JaCoCo HTML)
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: target/site/jacoco/
-          if-no-files-found: error
-          retention-days: 7
+      - name: Run unit tests & generate coverage
+        run: mvn -B -ntp clean test jacoco:report -DskipITs
 
       - name: Add JaCoCo coverage comment to PR
         if: github.event_name == 'pull_request'
@@ -47,6 +39,20 @@ jobs:
           min-coverage-changed-files: 0
           title: "📊 Test Coverage Report"
           update-comment: true
+
+      - name: Enforce coverage threshold
+        run: mvn -B -ntp jacoco:check
+
+      - name: Upload Coverage Report (JaCoCo HTML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Package
+        run: mvn -B -ntp package -DskipTests
 
       - name: Log in to GHCR
         if: github.event_name == 'push'
