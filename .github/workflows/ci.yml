@@ -26,7 +26,7 @@ jobs:
           cache: "maven"
 
       - name: Run unit tests & generate coverage
-        run: mvn -B -ntp clean test jacoco:report -DskipITs
+        run: mvn -B -ntp clean verify -DskipITs
 
       - name: Add JaCoCo coverage comment to PR
         if: github.event_name == 'pull_request'
@@ -39,9 +39,6 @@ jobs:
           min-coverage-changed-files: 0
           title: "📊 Test Coverage Report"
           update-comment: true
-
-      - name: Enforce coverage threshold
-        run: mvn -B -ntp jacoco:check
 
       - name: Upload Coverage Report (JaCoCo HTML)
         uses: actions/upload-artifact@v4
